@@ -1,4 +1,4 @@
-import InputData as Settings
+import InputDataSens2Cost as Settings
 import scr.FormatFunctions as F
 import scr.StatisticalClasses as Stat
 import scr.EconEvalClasses as Econ
@@ -47,9 +47,9 @@ def print_outcomes(simOutput, therapy_name):
 
 
 def draw_survival_curves_and_histograms(simOutputs_warfarin, simOutputs_Dabigitran150):
-    """ draws the survival curves and the histograms of time until stoke deaths
+    """ draws the survival curves and the histograms of time until stroke deaths
     :param simOutputs_warfarin: output of a cohort simulated under warfarin therapy
-    :param simOutputs_Dabigitran150: output of a cohort simulated under dab150 therapy
+    :param simOutputs_Dabigitran150: output of a cohort simulated under dab 150 therapy
     """
 
     # get survival curves of both treatments
@@ -90,7 +90,7 @@ def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran150):
     """ prints average increase in survival time, discounted cost, and discounted utility
     under dab therapy compared to warf therapy
     :param simOutputs_warfarin: output of a cohort simulated under warfarin therapy
-    :param simOutputs_Dabigitran150: output of a cohort simulated under dab therapy
+    :param simOutputs_Dabigitran150: output of a cohort simulated under dab150 therapy
     """
 
     # increase in survival time under dab therapy with respect to warf therapy

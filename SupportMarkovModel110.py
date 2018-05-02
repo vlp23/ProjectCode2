@@ -47,9 +47,9 @@ def print_outcomes(simOutput, therapy_name):
 
 
 def draw_survival_curves_and_histograms(simOutputs_warfarin, simOutputs_Dabigitran110):
-    """ draws the survival curves and the histograms of time until HIV deaths
-    :param simOutputs_mono: output of a cohort simulated under mono therapy
-    :param simOutputs_combo: output of a cohort simulated under combination therapy
+    """ draws the survival curves and the histograms of time until stroke deaths
+    :param simOutputs_warfarin: output of a cohort simulated under warf therapy
+    :param simOutputs_Dabigitran110: output of a cohort simulated under dab therapy
     """
 
     # get survival curves of both treatments
@@ -88,12 +88,12 @@ def draw_survival_curves_and_histograms(simOutputs_warfarin, simOutputs_Dabigitr
 
 def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran110):
     """ prints average increase in survival time, discounted cost, and discounted utility
-    under combination therapy compared to mono therapy
-    :param simOutputs_mono: output of a cohort simulated under mono therapy
-    :param simOutputs_combo: output of a cohort simulated under combination therapy
+    under dab therapy compared to warf therapy
+    :param simOutputs_warfarin: output of a cohort simulated under warf therapy
+    :param simOutputs_Dabigitran110: output of a cohort simulated under dab therapy
     """
 
-    # increase in survival time under combination therapy with respect to mono therapy
+    # increase in survival time under dab therapy with respect to warf therapy
     increase_survival_time = Stat.DifferenceStatIndp(name="Increase in survival time",
                                                      x=simOutputs_Dabigitran110.get_survival_times(),
                                                      y_ref=simOutputs_warfarin.get_survival_times())
@@ -106,7 +106,7 @@ def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran110):
           "and {:.{prec}%} CI:".format(1 - Settings.ALPHA, prec=0),
           estimate_CI)
 
-    # increase in discounted total cost under combination therapy with respect to mono therapy
+    # increase in discounted total cost under dab therapy with respect to warf therapy
     increase_discounted_cost = Stat.DifferenceStatIndp(
         name='Increase in discounted cost',
         x=simOutputs_Dabigitran110.get_costs(),
@@ -138,10 +138,10 @@ def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran110):
           estimate_CI)
 
 
-def report_CEA_CBA(simOutputs_Dabigitran110, simOutputs_warfarin):
-    Dabigitran110_therapy_strategy=Econ.Strategy(name="Warfarin therapy", cost_obs=simOutputs_warfarin.get_costs(),
+def report_CEA_CBA(simOutputs_warfarin, simOutputs_Dabigitran110):
+    warfarin_therapy_strategy=Econ.Strategy(name="Warfarin therapy", cost_obs=simOutputs_warfarin.get_costs(),
                                       effect_obs=simOutputs_warfarin.get_utilities())
-    warfarin_therapy_strategy=Econ.Strategy(name="Dabigitran110 therapy", cost_obs=simOutputs_Dabigitran110.get_costs(),
+    Dabigitran110_therapy_strategy=Econ.Strategy(name="Dabigitran110 therapy", cost_obs=simOutputs_Dabigitran110.get_costs(),
                                             effect_obs=simOutputs_Dabigitran110.get_utilities())
 
     listofStrategies = [warfarin_therapy_strategy, Dabigitran110_therapy_strategy]

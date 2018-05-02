@@ -1,10 +1,10 @@
-import InputData as Settings
+import InputDataSensitivity as Settings
 import scr.FormatFunctions as F
 import scr.StatisticalClasses as Stat
 import scr.EconEvalClasses as Econ
 import scr.SamplePathClasses as PathCls
 import scr.FigureSupport as Figs
-
+#WHEN BASE STROKE RATE IS INCREASED
 
 def print_outcomes(simOutput, therapy_name):
     """ prints the outcomes of a simulated cohort
@@ -46,17 +46,17 @@ def print_outcomes(simOutput, therapy_name):
     print("")
 
 
-def draw_survival_curves_and_histograms(simOutputs_warfarin, simOutputs_Dabigitran150):
-    """ draws the survival curves and the histograms of time until stoke deaths
-    :param simOutputs_warfarin: output of a cohort simulated under warfarin therapy
-    :param simOutputs_Dabigitran150: output of a cohort simulated under dab150 therapy
+def draw_survival_curves_and_histograms(simOutputs_warfarin, simOutputs_Dabigitran110):
+    """ draws the survival curves and the histograms of time until stroke deaths
+    :param simOutputs_warfarin: output of a cohort simulated under warf therapy
+    :param simOutputs_Dabigitran110: output of a cohort simulated under dab therapy
     """
 
     # get survival curves of both treatments
     survival_curves = [
 
         simOutputs_warfarin.get_survival_curve(),
-        simOutputs_Dabigitran150.get_survival_curve()
+        simOutputs_Dabigitran110.get_survival_curve()
     ]
 
     # graph survival curve
@@ -65,13 +65,13 @@ def draw_survival_curves_and_histograms(simOutputs_warfarin, simOutputs_Dabigitr
         title='Survival curve',
         x_label='Simulation time step (year)',
         y_label='Number of alive patients',
-        legends=['Warfarin', 'Dabigitran150 Therapy']
+        legends=['Warfarin', 'Dabigitran110 Therapy']
     )
 
     # histograms of survival times
     set_of_survival_times = [
         simOutputs_warfarin.get_survival_times(),
-        simOutputs_Dabigitran150.get_survival_times()
+        simOutputs_Dabigitran110.get_survival_times()
     ]
 
     # graph histograms
@@ -81,21 +81,21 @@ def draw_survival_curves_and_histograms(simOutputs_warfarin, simOutputs_Dabigitr
         x_label='Survival time (year)',
         y_label='Counts',
         bin_width=1,
-        legend=['Warfarin Therapy', 'Dabigitran150 Therapy'],
+        legend=['Warfarin Therapy', 'Dabigitran110 Therapy'],
         transparency=0.6
     )
 
 
-def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran150):
+def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran110):
     """ prints average increase in survival time, discounted cost, and discounted utility
     under dab therapy compared to warf therapy
-    :param simOutputs_warfarin: output of a cohort simulated under warfarin therapy
-    :param simOutputs_Dabigitran150: output of a cohort simulated under dab therapy
+    :param simOutputs_warfarin: output of a cohort simulated under warf therapy
+    :param simOutputs_Dabigitran110: output of a cohort simulated under dab therapy
     """
 
     # increase in survival time under dab therapy with respect to warf therapy
     increase_survival_time = Stat.DifferenceStatIndp(name="Increase in survival time",
-                                                     x=simOutputs_Dabigitran150.get_survival_times(),
+                                                     x=simOutputs_Dabigitran110.get_survival_times(),
                                                      y_ref=simOutputs_warfarin.get_survival_times())
     # estimate and CI
     estimate_CI = F.format_estimate_interval(estimate=increase_survival_time.get_mean(),
@@ -106,10 +106,10 @@ def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran150):
           "and {:.{prec}%} CI:".format(1 - Settings.ALPHA, prec=0),
           estimate_CI)
 
-    # increase in discounted total cost under dab therapy with respect to warfarin therapy
+    # increase in discounted total cost under dab therapy with respect to warf therapy
     increase_discounted_cost = Stat.DifferenceStatIndp(
         name='Increase in discounted cost',
-        x=simOutputs_Dabigitran150.get_costs(),
+        x=simOutputs_Dabigitran110.get_costs(),
         y_ref=simOutputs_warfarin.get_costs())
 
     # estimate and CI
@@ -122,10 +122,10 @@ def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran150):
           "and {:.{prec}%} CI:".format(1 - Settings.ALPHA, prec=0),
           estimate_CI)
 
-    # increase in discounted total utility under dab therapy with respect to warfarin therapy
+    # increase in discounted total utility under dab therapy with respect to warf therapy
     increase_discounted_utility = Stat.DifferenceStatIndp(
         name='Increase in discounted cost',
-        x=simOutputs_Dabigitran150.get_utilities(),
+        x=simOutputs_Dabigitran110.get_utilities(),
         y_ref=simOutputs_warfarin.get_utilities())
 
     # estimate and CI
@@ -138,16 +138,15 @@ def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran150):
           estimate_CI)
 
 
-def report_CEA_CBA(simOutputs_warfarin, simOutputs_Dabigitran150):
-    warfarin_therapy_strategy = Econ.Strategy(name="Warfarin therapy", cost_obs=simOutputs_warfarin.get_costs(),
-                                                   effect_obs=simOutputs_warfarin.get_utilities())
-    Dabigitran150_therapy_strategy = Econ.Strategy(name="Dabigitran150 therapy",
-                                              cost_obs=simOutputs_Dabigitran150.get_costs(),
-                                              effect_obs=simOutputs_Dabigitran150.get_utilities())
+def report_CEA_CBA(simOutputs_warfarin, simOutputs_Dabigitran110):
+    warfarin_therapy_strategy=Econ.Strategy(name="Warfarin therapy", cost_obs=simOutputs_warfarin.get_costs(),
+                                      effect_obs=simOutputs_warfarin.get_utilities())
+    Dabigitran110_therapy_strategy=Econ.Strategy(name="Dabigitran110 therapy", cost_obs=simOutputs_Dabigitran110.get_costs(),
+                                            effect_obs=simOutputs_Dabigitran110.get_utilities())
 
-    listofStrategies = [warfarin_therapy_strategy, Dabigitran150_therapy_strategy]
+    listofStrategies = [warfarin_therapy_strategy, Dabigitran110_therapy_strategy]
 
-    CEA = Econ.CEA(listofStrategies, if_paired=False)
+    CEA = Econ. CEA(listofStrategies, if_paired=False)
 
     CEA.show_CE_plane(
         title='Cost-Effectiveness Analysis',

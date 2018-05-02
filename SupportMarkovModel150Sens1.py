@@ -1,9 +1,10 @@
-import InputData as Settings
+import InputDataSensitivity as Settings
 import scr.FormatFunctions as F
 import scr.StatisticalClasses as Stat
 import scr.EconEvalClasses as Econ
 import scr.SamplePathClasses as PathCls
 import scr.FigureSupport as Figs
+#WHEN BASE STROKE RATE IS INCREASED
 
 
 def print_outcomes(simOutput, therapy_name):
@@ -47,7 +48,7 @@ def print_outcomes(simOutput, therapy_name):
 
 
 def draw_survival_curves_and_histograms(simOutputs_warfarin, simOutputs_Dabigitran150):
-    """ draws the survival curves and the histograms of time until stoke deaths
+    """ draws the survival curves and the histograms of time until stroke deaths
     :param simOutputs_warfarin: output of a cohort simulated under warfarin therapy
     :param simOutputs_Dabigitran150: output of a cohort simulated under dab150 therapy
     """
@@ -138,7 +139,7 @@ def print_comparative_outcomes(simOutputs_warfarin, simOutputs_Dabigitran150):
           estimate_CI)
 
 
-def report_CEA_CBA(simOutputs_warfarin, simOutputs_Dabigitran150):
+def report_CEA_CBA(simOutputs_warfarin,simOutputs_Dabigitran150):
     warfarin_therapy_strategy = Econ.Strategy(name="Warfarin therapy", cost_obs=simOutputs_warfarin.get_costs(),
                                                    effect_obs=simOutputs_warfarin.get_utilities())
     Dabigitran150_therapy_strategy = Econ.Strategy(name="Dabigitran150 therapy",
